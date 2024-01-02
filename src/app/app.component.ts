@@ -6,4 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  loadedFeature: string = 'recipe';
+  
+  showRecipe: boolean = true;
+  onNavigate(event: string) {
+    this.loadedFeature = event;
+  }
 }
