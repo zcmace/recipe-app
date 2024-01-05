@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, catchError, tap, throwError } from 'rxjs';
 import { User } from '../../auth/user.model';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -10,13 +11,22 @@ export class AuthService {
   api_key = 'AIzaSyCqpnThfCnn6exgojN0GYPJeVsiTPOntWY';
   authRequest = Observable<AuthRequestData>;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router
+    ) {}
 
   signUp(email: string, password: string) {
     const url =
       'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=';
     const defaultErrorMessage = 'An error has occurred during Sign Up.';
     return this.makeAuthCall(url, email, password, defaultErrorMessage);
+  }
+
+  logOut() {
+    this.user.next(null);
+    this.router.navigate(['/auth']);
+
   }
 
   logIn(email: string, password: string) {
