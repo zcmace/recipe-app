@@ -4,7 +4,6 @@ import { AuthService, AuthResponseData } from '../services/auth/auth.service';
 import { Observable, take } from 'rxjs';
 import { Router } from '@angular/router';
 import { AlertComponent } from '../shared/alert/alert.component';
-import { PlaceholderDirective } from '../shared/directives/placeholder.directive';
 
 @Component({
   selector: 'app-auth',
@@ -15,7 +14,7 @@ export class AuthComponent {
   isLoginMode = true;
   isLoading = false;
   authObs: Observable<AuthResponseData>;
-  @ViewChild(PlaceholderDirective, {static: true, read: ViewContainerRef}) alertHost: ViewContainerRef;
+  @ViewChild('vcf', {static: true, read: ViewContainerRef}) alertHost: ViewContainerRef;
 
   constructor(
     private authService: AuthService,

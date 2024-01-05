@@ -9,9 +9,7 @@ import { OutletContext } from '@angular/router';
 export class AlertComponent {
   @Input() message: string;
   @Output() close = new EventEmitter<void>();
-
   onClose() {
     this.close.emit();
   }
-
 }
