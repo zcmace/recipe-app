@@ -4,17 +4,17 @@ export class Recipe {
     public name: string;
     public description: string;
     public imagePath: string;
-    public requiredIngredients?: Ingredient[]
+    public ingredients?: Ingredient[]
 
-    constructor(name: string, desc: string, imagePath: string, requiredIngredients?: Ingredient[]) {
+    constructor(name: string, desc: string, imagePath: string, ingredients?: Ingredient[]) {
         this.name = name;
         this.description = desc;
         this.imagePath = imagePath;
-        this.requiredIngredients = requiredIngredients;
+        this.ingredients = ingredients;
 
     }
 
     setRequiredIngredients(req: Ingredient[]) {
-        this.requiredIngredients = req;
+        this.ingredients = req;
     }
 }
