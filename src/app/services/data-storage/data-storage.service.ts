@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Recipe } from '../../../models/recipe.model';
 import { RecipeService } from '../recipe/recipe.service';
-import { ThisReceiver } from '@angular/compiler';
-import { UrlHandlingStrategy } from '@angular/router';
-import { map, tap } from 'rxjs/operators';
+import { exhaustMap, map, take, tap } from 'rxjs/operators';
+import { AuthService } from '../auth/auth.service';
+import { User } from '../../auth/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,11 @@ export class DataStorageService {
   apiBase = 'https://ng-course-recipe-book-zmace-default-rtdb.firebaseio.com'
   recipesUrl = '/recipes.json';
 
-  constructor(private http: HttpClient, private recipeService: RecipeService) { }
+  constructor(
+    private http: HttpClient,
+    private recipeService: RecipeService,
+    private authService: AuthService
+    ) { }
 
   storeRecipes() {
     const recipes = this.recipeService.getRecipes();
@@ -26,17 +30,15 @@ export class DataStorageService {
 
   fetchRecipes() {
     const url = this.apiBase + this.recipesUrl;
-    return this.http
-    .get(url)
-    .pipe(
+    return this.http.get(url).pipe(
       map((recipes: Recipe[]) => {
-      return recipes.map((recipe) => {
-        return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []}
-      });
-    }),
-    tap((recipes: Recipe[]) => {
-      this.recipeService.setRecipes(recipes);
-    }));
+        return recipes.map((recipe) => {
+          return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []}
+        });
+      }),
+      tap((recipes: Recipe[]) => {
+        this.recipeService.setRecipes(recipes);
+      }));
   }
 
 }
