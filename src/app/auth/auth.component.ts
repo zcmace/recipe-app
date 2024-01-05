@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { AuthService, AuthResponseData } from '../services/auth/auth.service';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { Router } from '@angular/router';
+import { AlertComponent } from '../shared/alert/alert.component';
+import { PlaceholderDirective } from '../shared/directives/placeholder.directive';
 
 @Component({
   selector: 'app-auth',
@@ -12,10 +14,8 @@ import { Router } from '@angular/router';
 export class AuthComponent {
   isLoginMode = true;
   isLoading = false;
-  errorMessage = '';
-
   authObs: Observable<AuthResponseData>;
-
+  @ViewChild(PlaceholderDirective, {static: true, read: ViewContainerRef}) alertHost: ViewContainerRef;
 
   constructor(
     private authService: AuthService,
@@ -43,12 +43,10 @@ export class AuthComponent {
     next: (resData) => {
       console.log(resData);
       this.isLoading = false;
-      this.errorMessage = '';
       this.router.navigate(['/recipes']);
     }, 
     error: (errorMessage: Error) => {
-      console.log(errorMessage.message)
-      this.errorMessage = errorMessage.message;
+      this.showErrorAlert(errorMessage.message);
       this.isLoading = false;
     }, 
     complete: () => {
@@ -57,4 +55,11 @@ export class AuthComponent {
     form.reset();
   }
 
+  private showErrorAlert(message: string) {
+    const alert = this.alertHost.createComponent(AlertComponent);
+    alert.instance.message = message;
+    alert.instance.close.pipe(take(1)).subscribe(() => {
+      alert.destroy();
+    })
+  }
 }
