@@ -4,9 +4,9 @@ export class Recipe {
     public name: string;
     public description: string;
     public imagePath: string;
-    public requiredIngredients?: Map<Ingredient, number>;
+    public requiredIngredients?: Ingredient[]
 
-    constructor(name: string, desc: string, imagePath: string, requiredIngredients?: Map<Ingredient, number>) {
+    constructor(name: string, desc: string, imagePath: string, requiredIngredients?: Ingredient[]) {
         this.name = name;
         this.description = desc;
         this.imagePath = imagePath;
@@ -14,7 +14,7 @@ export class Recipe {
 
     }
 
-    setRequiredIngredients(req: Map<Ingredient, number>) {
+    setRequiredIngredients(req: Ingredient[]) {
         this.requiredIngredients = req;
     }
 }
