@@ -5,7 +5,6 @@ import { RecipeService } from "../../services/recipe/recipe.service";
 import { AuthService } from "../../services/auth/auth.service";
 import { Subscription } from "rxjs";
 import { User } from "../../auth/user.model";
-import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
     selector: 'app-header',
@@ -17,9 +16,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     constructor(
             private dataStorageService: DataStorageService,
             private recipeService: RecipeService,
-            private authService: AuthService,
-            private route: ActivatedRoute,
-            private router: Router
+            private authService: AuthService
         ){}
     
     ngOnInit(): void {

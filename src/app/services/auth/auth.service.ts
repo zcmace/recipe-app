@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   user = new BehaviorSubject<User>(null);
+  private tokenExpirationTimer: any
 
   api_key = 'AIzaSyCqpnThfCnn6exgojN0GYPJeVsiTPOntWY';
   authRequest = Observable<AuthRequestData>;
@@ -26,7 +27,10 @@ export class AuthService {
   logOut() {
     this.user.next(null);
     this.router.navigate(['/auth']);
-
+    localStorage.removeItem('userData');
+    if (this.tokenExpirationTimer) {
+        clearTimeout(this.tokenExpirationTimer);
+    }
   }
 
   logIn(email: string, password: string) {
@@ -36,6 +40,34 @@ export class AuthService {
     return this.makeAuthCall(url, email, password, defaultErrorMessage);
   }
 
+
+  autoLogin() {
+    const userData: {
+        email: string,
+        id: string,
+        _token: string,
+        _tokenExpirationDate: string
+    } = JSON.parse(localStorage.getItem('userData')); 
+    if (!userData) {
+        return
+    }
+
+    const loadedUser = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate))
+
+    if (loadedUser.token) {
+        this.user.next(loadedUser);
+        const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
+        this.autoLogOut(expirationDuration)
+    }
+
+  }
+
+  autoLogOut(expriationDuration: number) {
+    console.log(expriationDuration);
+    this.tokenExpirationTimer = setTimeout(() => {
+        this.logOut();
+    }, expriationDuration);
+  }
 
   handleError(errorRes, defaultErrorMessage) {
     let errorMessage = defaultErrorMessage;
@@ -69,6 +101,8 @@ export class AuthService {
         expirationDate
       );
       this.user.next(user);
+      this.autoLogOut(expiresIn * 1000);
+      localStorage.setItem('userData', JSON.stringify(user));
   }
 
 
