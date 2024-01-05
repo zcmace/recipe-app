@@ -1,6 +1,7 @@
 import { EventEmitter } from '@angular/core';
 import { Recipe } from '../../../models/recipe.model';
 import { Ingredient } from '../../../models/ingredient.model';
+import { Subject } from 'rxjs';
 
 export class RecipeService {
   private recipes: Recipe[] = [
@@ -12,9 +13,9 @@ export class RecipeService {
         new Ingredient('Beef', 2),
         new Ingredient('Cheese', 2),
         new Ingredient('Buns', 2),
-        new Ingredient('Lettuce', 1)
-      ]  
-      ),
+        new Ingredient('Lettuce', 1),
+      ]
+    ),
     new Recipe(
       'Taco',
       'Beef taco',
@@ -24,11 +25,11 @@ export class RecipeService {
         new Ingredient('Cheese', 1),
         new Ingredient('Shell', 1),
         new Ingredient('Lettuce', 2),
-        new Ingredient('Taco Seasoning', 1)
+        new Ingredient('Taco Seasoning', 1),
       ]
-    )
+    ),
   ];
-  recipeSelected = new EventEmitter<Recipe>();
+  recipeSelected = new Subject<Recipe>();
 
   constructor() {}
 
@@ -36,4 +37,7 @@ export class RecipeService {
     return this.recipes.slice();
   }
 
+  getRecipe(index: number): Recipe {
+    return this.recipes[index];
+  }
 }
