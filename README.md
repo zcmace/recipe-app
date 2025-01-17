@@ -1,3 +1,11 @@
+# Example Angular Project
+
+Developed while earning Angular Certificate following the below Udemy Course
+
+Course Info:<br>
+  * Instructor: Maximilian Schwarzmüller
+  * [Course Link](https://www.udemy.com/share/101WAU3@GnpMhONgXgaIbCTI01oYOh1hN3U-dhgwj2DhsJMwYIEgnNcuS3vZ4UI9BSrnx7l-yQ==/)
+
 # RecipeApp
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.3.
